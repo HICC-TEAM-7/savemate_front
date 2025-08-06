@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FaCoins } from 'react-icons/fa';
 import { BsCreditCardFill } from 'react-icons/bs';
 import { FaWonSign } from 'react-icons/fa6';
-import { ExpenseModalProps } from '../types';
+import { ExpenseModalProps } from '../../types';
 
 const ExpenseModal = ({
   isOpen,

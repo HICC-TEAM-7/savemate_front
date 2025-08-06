@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useModal } from '../hooks/useModal';
-import ExpenseModal from '../components/ExpenseModal';
+import ExpenseModal from '../components/modal/ExpenseModal';
 import { Expense, ApiError } from '../types';
 import { createExpense } from '../api/expense';
 
