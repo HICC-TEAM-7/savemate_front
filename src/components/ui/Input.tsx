@@ -6,16 +6,12 @@ interface InputProps
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ error, className = '', style, ...props }, ref) => {
+  ({ error, className = '', ...props }, ref) => {
     return (
       <div className="w-full">
         {/* 입력 필드 */}
         <input
           ref={ref}
-          style={{
-            fontFamily: 'Pretendard',
-            ...style,
-          }}
           className={`
             flex h-16 px-6 items-center gap-2.5 
             rounded-xl bg-black bg-opacity-10 
