@@ -1,0 +1,44 @@
+/* Pretendard 폰트 정의 */
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 400;
+  font-style: normal;
+  src: url('../assets/fonts/pretendard/Pretendard-Regular.woff2')
+    format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 500;
+  font-style: normal;
+  src: url('../assets/fonts/pretendard/Pretendard-Medium.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 700;
+  font-style: normal;
+  src: url('../assets/fonts/pretendard/Pretendard-Bold.woff2') format('woff2');
+  font-display: swap;
+}
+
+/* LINE Seed Sans KR 폰트 정의 */
+@font-face {
+  font-family: 'LINE Seed Sans KR';
+  font-weight: 400;
+  font-style: normal;
+  src: url('../assets/fonts/line-seed/LINESeedSansKR-Regular.woff2')
+    format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LINE Seed Sans KR';
+  font-weight: 700;
+  font-style: normal;
+  src: url('../assets/fonts/line-seed/LINESeedSansKR-Bold.woff2')
+    format('woff2');
+  font-display: swap;
+}
