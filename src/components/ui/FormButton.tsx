@@ -1,19 +1,25 @@
 import { forwardRef } from 'react';
 
-type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+interface FormButtonProps {
+  type?: 'button' | 'submit' | 'reset';
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   isLoading?: boolean;
   loadingText?: string;
-};
+  disabled?: boolean;
+  children: React.ReactNode;
+  className?: string;
+}
 
-const FormButton = forwardRef<HTMLButtonElement, Props>(
+const FormButton = forwardRef<HTMLButtonElement, FormButtonProps>(
   (
     {
+      type = 'button',
+      onClick,
       isLoading = false,
       loadingText = '처리 중...',
-      className = '',
-      disabled,
+      disabled = false,
       children,
-      ...rest
+      className = '',
     },
     ref
   ) => {
@@ -27,11 +33,12 @@ const FormButton = forwardRef<HTMLButtonElement, Props>(
     return (
       <button
         ref={ref}
-        className={`${base} ${className}`}
+        type={type}
+        onClick={onClick}
         disabled={isLoading || disabled}
         aria-busy={isLoading}
         aria-live="polite"
-        {...rest}
+        className={`${base} ${className}`}
       >
         {isLoading ? (
           <span className="flex items-center justify-center gap-2">
