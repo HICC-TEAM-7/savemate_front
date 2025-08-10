@@ -35,7 +35,8 @@ const Sidebar = () => {
       <div className="flex justify-center items-center">
         <img src="/assets/logo/logo.png"
         alt="Save Mate Logo"
-        className="w-[130px] h-auto"
+        className="w-[130px] h-auto cursor-pointer"
+        onClick={() => navigate("/")}
         />
       </div>
 
