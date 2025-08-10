@@ -5,7 +5,7 @@ interface InputProps
   error?: string;
 }
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
+const FormInput = forwardRef<HTMLInputElement, InputProps>(
   ({ error, className = '', ...props }, ref) => {
     return (
       <div className="w-full">
@@ -31,6 +31,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   }
 );
 
-Input.displayName = 'Input';
+FormInput.displayName = 'FormInput';
 
-export default Input;
+export default FormInput;
