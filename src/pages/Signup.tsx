@@ -17,7 +17,7 @@ const Signup = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // --- 검증 로직
+  // 유효성검사
   const nicknameValid = useMemo(() => nickname.trim().length >= 2, [nickname]);
   const emailValid = useMemo(
     () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()),
@@ -105,7 +105,7 @@ const Signup = () => {
               isLoading={dupStatus === 'checking'}
               loadingText="확인 중"
               disabled={!nicknameValid || isSubmitting}
-              className="flex w-24 h-16 p-2.5 justify-center items-center gap-2.5 rounded-lg bg-white/20 text-sm font-bold leading-[1.3125rem] tracking-[-0.0175rem]"
+              className="!w-24 h-16 p-2.5 flex justify-center items-center gap-2.5 rounded-lg bg-white/20 text-sm font-bold leading-[1.3125rem] tracking-[-0.0175rem]"
             >
               중복 확인
             </FormButton>

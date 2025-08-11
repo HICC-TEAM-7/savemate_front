@@ -29,8 +29,7 @@
   font-family: 'LINE Seed Sans KR';
   font-weight: 400;
   font-style: normal;
-  src: url('../assets/fonts/line-seed/LINESeedSansKR-Regular.woff2')
-    format('woff2');
+  src: url('../assets/fonts/line-seed/LINESeedSansKR-Rg.woff2') format('woff2');
   font-display: swap;
 }
 
@@ -38,7 +37,6 @@
   font-family: 'LINE Seed Sans KR';
   font-weight: 700;
   font-style: normal;
-  src: url('../assets/fonts/line-seed/LINESeedSansKR-Bold.woff2')
-    format('woff2');
+  src: url('../assets/fonts/line-seed/LINESeedSansKR-Bd.woff2') format('woff2');
   font-display: swap;
 }
