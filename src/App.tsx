@@ -11,15 +11,20 @@ function App() {
   const hideSidebar = ["/login", "/signup"].includes(location.pathname);
 
   return (
-    <div className="min-h-screen app-background">
+    <div className="h-screen overflow-hidden app-background">
       {!hideSidebar && <Sidebar />}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/mission" element={<Mission />} />
-        <Route path="/friend" element={<Friend />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
+
+      <div className={`${hideSidebar ? 'ml-0' : 'ml-48'} h-screen flex flex-col`}>
+        <main className="flex-1 overflow-y-auto">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/mission" element={<Mission />} />
+            <Route path="/friend" element={<Friend />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Routes>
+        </main>
+      </div>
     </div>
   );
 }

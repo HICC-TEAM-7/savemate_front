@@ -3,6 +3,7 @@ import { useModal } from '../hooks/useModal';
 import ExpenseModal from '../components/modal/ExpenseModal';
 import { Expense, ApiError } from '../types';
 import { createExpense } from '../api/expense';
+import Top from '../components/layout/Top';
 
 const Home = () => {
   const { isOpen, openModal, closeModal } = useModal();
@@ -39,22 +40,27 @@ const Home = () => {
   };
 
   return (
-    // 임의 레이아웃
-    <div className="min-h-screen flex flex-col items-center justify-center gap-8">
-      <button
-        onClick={openModal}
-        disabled={isLoading}
-        className="px-8 py-4 bg-white-20 hover:bg-white-30 disabled:opacity-50 text-white font-bold rounded-lg transition-all duration-200 shadow-modal"
-      >
-        가계부 모달
-      </button>
+    <div className="min-h-screen flex flex-col">
+      {/*상단*/}
+      <div className="mt-[40px]">
+        <Top />
+      </div>
 
-      <ExpenseModal
-        isOpen={isOpen}
-        onClose={closeModal}
-        onSubmit={handleExpenseSubmit}
-        selectedDate={selectedDate}
-      />
+      <div className="flex flex-col flex-1 items-center justify-center gap-8">
+        <button
+          onClick={openModal}
+          disabled={isLoading}
+          className="px-8 py-4 bg-white-20 hover:bg-white-30 disabled:opacity-50 text-white font-bold rounded-lg transition-all duration-200 shadow-modal"
+        >
+          가계부 모달
+        </button>
+        <ExpenseModal
+          isOpen={isOpen}
+          onClose={closeModal}
+          onSubmit={handleExpenseSubmit}
+          selectedDate={selectedDate}
+        />
+      </div>
     </div>
   );
 };

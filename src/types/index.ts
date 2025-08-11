@@ -30,3 +30,14 @@ export interface ApiError {
   };
   message: string;
 }
+
+export interface Mission {
+  id: string;
+  title: string;
+  subtitle?: string;     // 없으면 "X일째 달성중!" 자동 생성 (MissionStatus에서 처리)
+  targetDays: number;
+  achievedDays?: number; // 일수 기준 진행률용
+  budgetWon?: number;    // 금액 기반 진행률(목표 금액)
+  spentWon?: number;     // 금액 기반 진행률(사용 금액)
+  progress?: number;     // 0~1 직접 지정 시 최우선
+}
