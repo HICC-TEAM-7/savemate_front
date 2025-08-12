@@ -71,16 +71,21 @@ const MissionStatus: React.FC<MissionStatusProps> = ({
         backdrop-blur-[25px]
         ${className}`}
     >
+      
       {/* ⬅ 왼쪽 패널 */}
-      <div
-        className="flex items-center justify-center self-stretch
-                   bg-white/5 border-r border-white/20"
-        style={{ width: leftWidth }}
+    <div
+      className="flex items-center justify-center self-stretch
+                bg-white/5 border-r border-white/20"
+      style={{ width: leftWidth }}
+    >
+      <span
+        className="text-white text-[20px] font-normal leading-[30px] tracking-[-0.4px] font-lineseed"
+        style={{ fontFamily: '"LINE Seed Sans KR", sans-serif' }}
       >
-        <span className="text-white/85 text-[20px] tracking-[0.25em]">
-          {leftLabel}
-        </span>
-      </div>
+        {leftLabel}
+      </span>
+    </div>
+
 
       {/* ➡ 오른쪽 본문 */}
       <div className="flex-1 min-w-0 p-4 pl-5">

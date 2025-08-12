@@ -1,7 +1,7 @@
 // src/components/ui/MissionStack.tsx
 import React, { useMemo, useState } from "react";
 import MissionStatus from "./MissionStatus";
-import type { Mission } from "../../api/mission"; // ✅ Mission 타입이 mission.ts에 있다고 했지!
+import type { Mission } from "../../api/mission";
 
 type MissionWithPos = Mission & { _pos: number };
 

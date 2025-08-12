@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Input from '../components/ui/Input';
+import FormInput from '../components/ui/FormInput';
+import FormButton from '../components/ui/FormButton';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ const Login = () => {
       <div className="mb-16">
         <img
           src="/assets/logo/logo.png"
-          alt="save mate"
+          alt="logo"
           className="h-16 md:h-20 object-contain"
         />
       </div>
@@ -57,7 +58,7 @@ const Login = () => {
         }}
       >
         {/* 이메일 입력 */}
-        <Input
+        <FormInput
           type="email"
           placeholder="이메일"
           value={formData.email}
@@ -67,7 +68,7 @@ const Login = () => {
         />
 
         {/* 비밀번호 입력 */}
-        <Input
+        <FormInput
           type="password"
           placeholder="비밀번호"
           value={formData.password}
@@ -77,22 +78,15 @@ const Login = () => {
         />
 
         {/* 로그인 버튼 */}
-        <button
+        <FormButton
           type="submit"
-          disabled={
-            isLoading || !formData.email.trim() || !formData.password.trim()
-          }
-          className="w-full h-[4rem] px-[1.5625rem] py-[0.625rem] flex justify-center items-center gap-[0.625rem] self-stretch rounded-xl border border-white/20 bg-white/10 shadow-[4px_4px_15px_0_rgba(0,0,0,0.10)] hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-lg transition-all duration-200 backdrop-blur-modal mt-8"
+          isLoading={isLoading}
+          loadingText="로그인 중..."
+          disabled={!formData.email.trim() || !formData.password.trim()}
+          className="mt-8"
         >
-          {isLoading ? (
-            <span className="flex items-center justify-center gap-2">
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              로그인 중...
-            </span>
-          ) : (
-            'LOGIN'
-          )}
-        </button>
+          LOGIN
+        </FormButton>
       </form>
 
       {/* 부가 링크 */}
