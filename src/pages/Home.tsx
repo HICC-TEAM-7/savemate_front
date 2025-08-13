@@ -7,6 +7,7 @@ import { Expense, ApiError } from '../types';
 import { createExpense } from '../api/expense';
 import Top from '../components/layout/Top';
 import Middle from '../components/layout/Middle';
+import Bottom from '../components/layout/Bottom';
 
 const Home = () => {
   const { isOpen, openModal, closeModal } = useModal();
@@ -46,16 +47,22 @@ const Home = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/*상단*/}
+      {/* 상단 */}
       <div className="mt-[40px]">
         <Top />
       </div>
 
+      {/* 중간(캘린더 + 그래프) */}
       <div className="mt-6">
-        {/* 날짜 클릭 시 모달 열리도록 핸들러 전달 */}
         <Middle onSelectDate={handleCalendarSelect} />
       </div>
 
+      {/* 하단(소비 내역 리스트) */}
+      <div className="mt-6 px-5">
+        <Bottom />
+      </div>
+
+      {/* 지출 등록 모달 */}
       <div className="flex flex-col flex-1 items-center justify-center gap-8">
         <ExpenseModal
           isOpen={isOpen}
@@ -64,7 +71,6 @@ const Home = () => {
           selectedDate={selectedDate}
         />
       </div>
-      
     </div>
   );
 };
