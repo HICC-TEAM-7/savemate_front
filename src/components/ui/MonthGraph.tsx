@@ -1,16 +1,11 @@
-// src/components/ui/MonthGraph.tsx
 import React, { useEffect, useMemo, useState } from "react";
 import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { fetchMonthSpending, type DaySpending } from "../../api/spendingdata";
 
 type Props = {
-  /** 외부에서 월간 데이터를 넘기면 그걸 사용, 없으면 내부에서 fetchMonthSpending 호출 */
   data?: DaySpending[];
-  /** 기준 월(1~말일/오늘 계산용). data가 없을 때만 사용됨 */
   baseDate?: Date;
-  /** 이번 달이면 1일~오늘까지만(기본 true) */
   upToToday?: boolean;
-  /** 미래 달일 때 0원으로 채울지 (기본 false: 현재 달 기준 사용) */
   zeroFuture?: boolean;
   title?: string;
 };
@@ -36,7 +31,6 @@ const MonthGraph: React.FC<Props> = ({
 }) => {
   const [localData, setLocalData] = useState<DaySpending[]>([]);
 
-  // data prop 우선, 없으면 월간 데이터 로드
   useEffect(() => {
     if (data && data.length) {
       setLocalData(data);
@@ -51,7 +45,6 @@ const MonthGraph: React.FC<Props> = ({
     })();
   }, [data, baseDate, upToToday, zeroFuture]);
 
-  // 합계/퍼센트 계산 → 비중 내림차순 정렬
   const { segs, total } = useMemo(() => {
     const sum = localData.reduce(
       (acc, d) => {
@@ -63,9 +56,7 @@ const MonthGraph: React.FC<Props> = ({
       },
       { food: 0, gift: 0, cafe: 0, travel: 0 }
     );
-
     const total = sum.food + sum.gift + sum.cafe + sum.travel;
-
     const keys: CategoryKey[] = ["food", "gift", "cafe", "travel"];
     const segs = keys
       .map((k) => ({
@@ -76,21 +67,19 @@ const MonthGraph: React.FC<Props> = ({
         percent: total ? Math.round((sum[k] / total) * 100) : 0,
       }))
       .sort((a, b) => b.value - a.value);
-
     return { segs, total };
   }, [localData]);
 
-  // 호버 상태 (없으면 기본 화면: 총액만 표시)
   const [hoverKey, setHoverKey] = useState<CategoryKey | undefined>(undefined);
   const hovered = segs.find((s) => s.key === hoverKey);
 
   return (
-    <div className="w-[256px]">
-      <div className="text-center text-xs tracking-[0.15em] opacity-90 mb-2">
+    <div className="w-full max-w-[200px]">
+      <div className="mt-[clamp(6px,1.2vw,14px)] text-center text-[clamp(10px,1.2vw,12px)] tracking-[0.15em] opacity-90">
         {title}
       </div>
 
-      <div className="h-64 relative">
+      <div className="relative h-[clamp(150px,18vw,200px)]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -101,42 +90,37 @@ const MonthGraph: React.FC<Props> = ({
               outerRadius="90%"
               startAngle={90}
               endAngle={-270}
-              paddingAngle={0}   // 조각 간격 0
-              stroke="none"      // 경계선 없음
+              paddingAngle={0}
+              stroke="none"
               isAnimationActive={false}
             >
               {segs.map((s, idx) => (
                 <Cell
                   key={s.key}
                   fill={`rgba(255,255,255,${OPACITIES[idx] ?? 0.1})`}
-                  onMouseEnter={() => {
-                    if (hoverKey !== s.key) setHoverKey(s.key as CategoryKey);
-                  }}
-                  onMouseLeave={() => {
-                    if (hoverKey) setHoverKey(undefined);
-                  }}
+                  onMouseEnter={() => setHoverKey(s.key)}
+                  onMouseLeave={() => setHoverKey(undefined)}
                 />
               ))}
             </Pie>
           </PieChart>
         </ResponsiveContainer>
 
-        {/* 중앙: 기본=총액(2줄) / 호버=항목·퍼센트·카테고리 합 */}
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
           {hovered ? (
             <>
-              <div className="text-[12px] opacity-90">{hovered.label}</div>
-              <div className="text-[22px] font-semibold leading-none mt-1">
+              <div className="text-[clamp(10px,1vw,12px)] opacity-90">{hovered.label}</div>
+              <div className="text-[clamp(16px,2vw,20px)] font-semibold leading-none mt-1">
                 {hovered.percent}%
               </div>
-              <div className="text-[11px] opacity-80 mt-1">
+              <div className="text-[clamp(9px,0.9vw,11px)] opacity-80 mt-1">
                 {currency(hovered.amount)}원
               </div>
             </>
           ) : (
             <>
-              <div className="text-[16px] opacity-80">총액</div>
-              <div className="text-[22px] font-semibold leading-none mt-1">
+              <div className="text-[clamp(12px,1.5vw,16px)] opacity-80">총액</div>
+              <div className="text-[clamp(16px,2vw,20px)] font-semibold leading-none mt-1">
                 {currency(total)}원
               </div>
             </>

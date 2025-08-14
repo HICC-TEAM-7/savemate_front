@@ -1,5 +1,4 @@
-// src/components/layout/Middle.tsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { format } from "date-fns";
 import Calendar from "../ui/Calendar";
 import WeekGraph from "../ui/WeekGraph";
@@ -15,8 +14,7 @@ type Props = {
   baseDate?: Date;
 };
 
-const Middle: React.FC<Props> = ({ onSelectDate /*, baseDate*/ }) => {
-  // 오늘 기준 키 (하루에 한번만 바뀜)
+const Middle: React.FC<Props> = ({ onSelectDate }) => {
   const todayKey = useMemo(() => format(new Date(), "yyyy-MM-dd"), []);
   const monthKey = useMemo(() => format(new Date(), "yyyy-MM"), []);
 
@@ -24,22 +22,24 @@ const Middle: React.FC<Props> = ({ onSelectDate /*, baseDate*/ }) => {
   const [monthData, setMonthData] = useState<DaySpending[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // 주간: 이번 주 월요일 ~ 오늘
+  // 측정 refs + 동적 gap
+  const calendarRef = useRef<HTMLDivElement | null>(null);
+  const firstGraphRef = useRef<HTMLDivElement | null>(null);
+  const [dynamicGap, setDynamicGap] = useState<number>(24);
+
   useEffect(() => {
     let canceled = false;
     (async () => {
       try {
         const w = await fetchWeekSpending(new Date(todayKey), true);
         if (!canceled) setWeekData(w);
-      } catch (e: any) {
-        if (!canceled) setError(e?.message ?? "주간 데이터 로드 실패");
-        console.error("[Middle] week load error:", e);
+      } catch (e: unknown) {
+        if (!canceled) setError(e instanceof Error ? e.message : "주간 데이터 로드 실패");
       }
     })();
     return () => { canceled = true; };
   }, [todayKey]);
 
-  // 월간: 이번 달 1일 ~ 오늘
   useEffect(() => {
     let canceled = false;
     (async () => {
@@ -47,45 +47,83 @@ const Middle: React.FC<Props> = ({ onSelectDate /*, baseDate*/ }) => {
         const basis = new Date(`${monthKey}-01`);
         const m = await fetchMonthSpending(basis, { upToToday: true, zeroFuture: false });
         if (!canceled) setMonthData(m);
-      } catch (e: any) {
-        if (!canceled) setError(e?.message ?? "월간 데이터 로드 실패");
-        console.error("[Middle] month load error:", e);
+      } catch (e: unknown) {
+        if (!canceled) setError(e instanceof Error ? e.message : "월간 데이터 로드 실패");
       }
     })();
     return () => { canceled = true; };
   }, [monthKey]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const DEFAULT_GAP = 24;
+    const mq = window.matchMedia("(min-width: 768px)");
+    const compute = () => {
+      if (!mq.matches) {
+        setDynamicGap(DEFAULT_GAP);
+        return;
+      }
+      const calH = calendarRef.current?.getBoundingClientRect().height ?? 0;
+      const g1H = firstGraphRef.current?.getBoundingClientRect().height ?? 0;
+      const gap = calH > 0 && g1H > 0 ? Math.max(0, calH - 2 * g1H) : DEFAULT_GAP;
+      setDynamicGap(gap);
+    };
+    const roCal = new ResizeObserver(compute);
+    const roG1 = new ResizeObserver(compute);
+    if (calendarRef.current) roCal.observe(calendarRef.current);
+    if (firstGraphRef.current) roG1.observe(firstGraphRef.current);
+    window.addEventListener("resize", compute);
+    const onMQ = () => compute();
+    mq.addEventListener("change", onMQ);
+    requestAnimationFrame(compute);
+    return () => {
+      roCal.disconnect();
+      roG1.disconnect();
+      window.removeEventListener("resize", compute);
+      mq.removeEventListener("change", onMQ);
+    };
+  }, []);
+
   return (
-    <section className="p-4">
-      {/* 바깥 그리드: 좌측 캘린더 / 우측 그래프스택 */}
-      <div className="grid gap-4 lg:grid-cols-2">
-        {/* 왼쪽: 캘린더 카드 (세로로 넉넉히) */}
-        <div className="w-full rounded-[12px] bg-[rgba(233,233,233,0.06)] shadow-md backdrop-blur-sm p-4">
+    // ✅ 수평 패딩 제거(= Home의 컨테이너 패딩만 사용)
+    <section className="w-full py-4">
+      {/* md: [좌 minmax | 우 235px] → Home의 1080폭을 그대로 채움 */}
+      <div className="grid items-start gap-6 md:[grid-template-columns:minmax(0,1fr)_235px]">
+        {/* 캘린더 카드 */}
+        <div
+          ref={calendarRef}
+          className="w-full rounded-[12px] bg-[rgba(233,233,233,0.06)] shadow-md backdrop-blur-sm p-4"
+        >
           <Calendar weekStartsOn={1} onSelectDate={onSelectDate} />
         </div>
 
-        {/* 오른쪽: 주간+월간 그래프를 세로로 스택 */}
-        <div className="w-[256px] flex flex-col gap-4">
-          {/* 주간 그래프 카드 */}
-          <div className="rounded-[12px] bg-[rgba(233,233,233,0.06)] shadow-md backdrop-blur-sm p-4 h-[252px]">
-            {!weekData && !error ? (
-              <div className="text-sm opacity-70">주간 데이터 불러오는 중…</div>
-            ) : error ? (
-              <div className="text-sm text-red-400">주간 데이터 오류: {error}</div>
-            ) : (
-              <WeekGraph data={weekData!} />
-            )}
+        {/* 오른쪽: 정사각 그래프 2개 (gap = 캘린더 높이에 맞춤) */}
+        <div className="w-full flex flex-col" style={{ gap: `${dynamicGap}px` }}>
+          <div
+            ref={firstGraphRef}
+            className="w-full aspect-square rounded-[12px] bg-[rgba(233,233,233,0.06)] shadow-md backdrop-blur-sm p-2 md:p-3 overflow-hidden"
+          >
+            <div className="w-full h-full flex items-center justify-center">
+              {!weekData && !error ? (
+                <div className="text-sm opacity-70">주간 데이터 불러오는 중…</div>
+              ) : error ? (
+                <div className="text-sm text-red-400">주간 데이터 오류: {error}</div>
+              ) : (
+                <WeekGraph data={weekData!} fill />
+              )}
+            </div>
           </div>
 
-          {/* 월간 그래프 카드 */}
-          <div className="rounded-[12px] bg-[rgba(233,233,233,0.06)] shadow-md backdrop-blur-sm p-4 h-[252px]">
-            {!monthData && !error ? (
-              <div className="text-sm opacity-70">월간 데이터 불러오는 중…</div>
-            ) : error ? (
-              <div className="text-sm text-red-400">월간 데이터 오류: {error}</div>
-            ) : (
-              <MonthGraph data={monthData!} />
-            )}
+          <div className="w-full aspect-square rounded-[12px] bg-[rgba(233,233,233,0.06)] shadow-md backdrop-blur-sm p-2 md:p-3 overflow-hidden">
+            <div className="w-full h-full flex items-center justify-center">
+              {!monthData && !error ? (
+                <div className="text-sm opacity-70">월간 데이터 불러오는 중…</div>
+              ) : error ? (
+                <div className="text-sm text-red-400">월간 데이터 오류: {error}</div>
+              ) : (
+                <MonthGraph data={monthData!} fill />
+              )}
+            </div>
           </div>
         </div>
       </div>

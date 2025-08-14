@@ -64,7 +64,7 @@ const MissionStatus: React.FC<MissionStatusProps> = ({
   return (
     <div
       onClick={onClick}
-      className={`group inline-flex w-[784px] h-[100px] overflow-hidden
+      className={`group inline-flex w-[750px] h-[95px] overflow-hidden
         rounded-[12px] border border-white/20
         bg-[rgba(233,233,233,0.01)]
         shadow-[22px_1px_20px_0_rgba(0,0,0,0.10)]
@@ -88,7 +88,7 @@ const MissionStatus: React.FC<MissionStatusProps> = ({
 
 
       {/* ➡ 오른쪽 본문 */}
-      <div className="flex-1 min-w-0 p-4 pl-5">
+      <div className="flex-1 min-w-0 p-3 pl-5">
         {/* 제목 */}
         <p className="text-white/95 font-semibold text-[16px] truncate">{title}</p>
 

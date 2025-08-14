@@ -68,7 +68,7 @@ function ComparisonCard({
 /** MY MATCH 컨테이너 (정적 3개 카드) */
 const FriendComparison: React.FC = () => {
   return (
-    <section className="w-full max-w-[520px] rounded-2xl border border-white/25 bg-white/10 backdrop-blur-xl p-4 md:p-6 text-white">
+    <section className="rounded-2xl border border-white/25 bg-white/10 backdrop-blur-xl p-4 md:p-6 text-white">
       <h2 className="text-sm md:text-base font-extrabold tracking-wide">
         MY MATCH
       </h2>

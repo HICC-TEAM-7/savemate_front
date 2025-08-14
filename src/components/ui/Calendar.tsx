@@ -24,7 +24,7 @@ const Calendar: React.FC<CalendarProps> = ({
     const all = getMonthMatrix(current, weekStartsOn);
     const lastRow = all.slice(-7);
     const curMonth = current.getMonth();
-    const lastRowIsNextOnly = lastRow.every(c => c.date.getMonth() !== curMonth);
+    const lastRowIsNextOnly = lastRow.every((c) => c.date.getMonth() !== curMonth);
     return lastRowIsNextOnly ? all.slice(0, -7) : all;
   }, [current, weekStartsOn]);
 
@@ -39,30 +39,30 @@ const Calendar: React.FC<CalendarProps> = ({
   const bottomRightIdx = lastRowStart + 6;
 
   return (
-    <div className="text-white w-full h-auto">
+    <div className="text-white w-full select-none">
       {/* 헤더 (월 가운데, 화살표 오른쪽) */}
-      <div className="relative mb-4 flex items-center">
+      <div className="relative mb-3 flex items-center">
         {/* 월(가운데 정렬) */}
         <div
-          className="absolute left-1/2 -translate-x-1/2 text-white text-[24px] font-normal leading-[36px] tracking-[-0.48px]"
+          className="absolute left-1/2 -translate-x-1/2 text-white text-[clamp(16px,2vw,24px)] font-normal leading-[1.4] tracking-[-0.48px]"
           style={{ fontFamily: '"LINE Seed Sans KR", sans-serif' }}
         >
           {format(current, "MMMM").toUpperCase()}
         </div>
 
         {/* 네비 버튼(오른쪽) */}
-        <div className="ml-auto mr-2 flex items-center gap-[4px]">
+        <div className="ml-auto mr-2 flex items-center gap-1">
           <button
             onClick={gotoPrev}
             aria-label="Previous month"
-            className="w-[19px] h-[15px] flex items-center justify-center text-xs text-[rgba(255,255,255,0.20)] hover:text-white transition-colors duration-150"
+            className="w-5 h-5 flex items-center justify-center text-xs text-[rgba(255,255,255,0.35)] hover:text-white transition-colors duration-150"
           >
             ◀
           </button>
           <button
             onClick={gotoNext}
             aria-label="Next month"
-            className="w-[19px] h-[15px] flex items-center justify-center text-xs text-[rgba(255,255,255,0.20)] hover:text-white transition-colors duration-150"
+            className="w-5 h-5 flex items-center justify-center text-xs text-[rgba(255,255,255,0.35)] hover:text-white transition-colors duration-150"
           >
             ▶
           </button>
@@ -70,15 +70,16 @@ const Calendar: React.FC<CalendarProps> = ({
       </div>
 
       {/* 요일 헤더 */}
-      <div className="grid grid-cols-7 gap-0 text-center text-14 text-white/80 mb-2">
+      <div className="grid grid-cols-7 gap-[4px] text-center mb-2">
         {labels.map((d, idx) => (
           <div
             key={d}
             className={[
-              "w-[107px] h-[24px] flex items-center justify-center",
+              "w-full py-1 md:py-2 flex items-center justify-center",
               "bg-white/10 border border-white/20",
               idx === 0 ? "rounded-tl-lg" : "",
               idx === 6 ? "rounded-tr-lg" : "",
+              "text-[clamp(10px,0.9vw,12px)] text-white/80",
             ].join(" ")}
           >
             {d}
@@ -86,8 +87,8 @@ const Calendar: React.FC<CalendarProps> = ({
         ))}
       </div>
 
-      {/* 날짜 그리드 */}
-      <div className="grid grid-cols-7 gap-0">
+      {/* 날짜 그리드 (7열 고정, 셀은 가로에 맞춰 높이 비율 유지) */}
+      <div className="grid grid-cols-7 gap-[4px]">
         {cells.map(({ date, inCurrentMonth, key }, i) => {
           const active = selected && isSameDay(selected, date);
           const today = isToday(date);
@@ -113,11 +114,12 @@ const Calendar: React.FC<CalendarProps> = ({
                 onSelectDate?.(date);
               }}
               className={[
-                "group relative text-left transition border",
-                "w-[107px] h-[79px] p-2 flex justify-end items-start",
+                "group relative transition border w-full",
+                "aspect-[4/3]",
+                "p-2 md:p-3 flex justify-end items-start",
                 inCurrentMonth
                   ? "bg-white/5 border-white/20"
-                  : "bg-white/5/50 border-white/10 opacity-60",
+                  : "bg-white/5 border-white/10 opacity-60",
                 highlightClass,
                 bottomCornerClass,
                 "overflow-hidden",
@@ -125,7 +127,9 @@ const Calendar: React.FC<CalendarProps> = ({
               aria-current={today ? "date" : undefined}
               aria-pressed={!!active}
             >
-              <span className="text-sm">{format(date, "d")}</span>
+              <span className="text-[clamp(10px,1vw,14px)] leading-none">
+                {format(date, "d")}
+              </span>
             </button>
           );
         })}
