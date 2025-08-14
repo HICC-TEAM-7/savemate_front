@@ -85,14 +85,13 @@ const Middle: React.FC<Props> = ({ onSelectDate }) => {
   }, []);
 
   return (
-    // ✅ 수평 패딩 제거(= Home의 컨테이너 패딩만 사용)
     <section className="w-full py-4">
-      {/* md: [좌 minmax | 우 235px] → Home의 1080폭을 그대로 채움 */}
-      <div className="grid items-start gap-6 md:[grid-template-columns:minmax(0,1fr)_235px]">
+      {/* md: [좌 minmax | 우 240px] */}
+      <div className="grid items-start gap-6 md:[grid-template-columns:minmax(0,1fr)_240px]">
         {/* 캘린더 카드 */}
         <div
           ref={calendarRef}
-          className="w-full rounded-[12px] bg-[rgba(233,233,233,0.06)] shadow-md backdrop-blur-sm p-4"
+          className="w-full rounded-[12px] bg-[rgba(233,233,233,0.06)] shadow-md backdrop-blur-sm px-4 pb-4 pt-6"
         >
           <Calendar weekStartsOn={1} onSelectDate={onSelectDate} />
         </div>
@@ -101,7 +100,7 @@ const Middle: React.FC<Props> = ({ onSelectDate }) => {
         <div className="w-full flex flex-col" style={{ gap: `${dynamicGap}px` }}>
           <div
             ref={firstGraphRef}
-            className="w-full aspect-square rounded-[12px] bg-[rgba(233,233,233,0.06)] shadow-md backdrop-blur-sm p-2 md:p-3 overflow-hidden"
+            className="w-full aspect-square rounded-[12px] bg-[rgba(233,233,233,0.06)] backdrop-blur-sm p-2 md:p-3 overflow-hidden"
           >
             <div className="w-full h-full flex items-center justify-center">
               {!weekData && !error ? (
@@ -114,7 +113,7 @@ const Middle: React.FC<Props> = ({ onSelectDate }) => {
             </div>
           </div>
 
-          <div className="w-full aspect-square rounded-[12px] bg-[rgba(233,233,233,0.06)] shadow-md backdrop-blur-sm p-2 md:p-3 overflow-hidden">
+          <div className="w-full aspect-square rounded-[12px] bg-[rgba(233,233,233,0.06)] backdrop-blur-sm p-2 md:p-3 overflow-hidden">
             <div className="w-full h-full flex items-center justify-center">
               {!monthData && !error ? (
                 <div className="text-sm opacity-70">월간 데이터 불러오는 중…</div>

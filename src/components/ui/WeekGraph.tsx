@@ -126,10 +126,10 @@ const WeekGraph: React.FC<Props> = ({
             </>
           ) : (
             <>
-              <div className="text-[clamp(12px,1.5vw,16px)] opacity-80">
+              <div className="text-[clamp(12px,1.5vw,12px)] opacity-80">
                 총액
               </div>
-              <div className="text-[clamp(16px,2vw,20px)] font-semibold leading-none mt-1">
+              <div className="text-[clamp(16px,2vw,15px)] font-semibold leading-none mt-1">
                 {currency(total)}원
               </div>
             </>

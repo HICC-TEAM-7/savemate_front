@@ -41,7 +41,7 @@ const Calendar: React.FC<CalendarProps> = ({
   return (
     <div className="text-white w-full select-none">
       {/* 헤더 (월 가운데, 화살표 오른쪽) */}
-      <div className="relative mb-3 flex items-center">
+      <div className="relative mb-7 flex items-center">
         {/* 월(가운데 정렬) */}
         <div
           className="absolute left-1/2 -translate-x-1/2 text-white text-[clamp(16px,2vw,24px)] font-normal leading-[1.4] tracking-[-0.48px]"
