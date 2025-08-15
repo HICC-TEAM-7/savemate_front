@@ -1,11 +1,11 @@
 import {
   startOfMonth,
-  endOfMonth,
+  // endOfMonth,
   startOfWeek,
   addDays,
   isSameMonth,
   format,
-} from "date-fns";
+} from 'date-fns';
 
 export type DayCell = {
   date: Date;
@@ -19,7 +19,7 @@ export type DayCell = {
  */
 export function getMonthMatrix(base: Date, weekStartsOn: 0 | 1 = 0): DayCell[] {
   const monthStart = startOfMonth(base);
-  const monthEnd = endOfMonth(base);
+  // const monthEnd = endOfMonth(base);
 
   const gridStart = startOfWeek(monthStart, { weekStartsOn });
   // gridEnd는 42칸 보장 루프로 대체
@@ -31,7 +31,7 @@ export function getMonthMatrix(base: Date, weekStartsOn: 0 | 1 = 0): DayCell[] {
     cells.push({
       date: day,
       inCurrentMonth: isSameMonth(day, monthStart),
-      key: format(day, "yyyy-MM-dd"),
+      key: format(day, 'yyyy-MM-dd'),
     });
     day = addDays(day, 1);
     // monthEnd 이후도 42칸 채워질 때까지 계속 채움
