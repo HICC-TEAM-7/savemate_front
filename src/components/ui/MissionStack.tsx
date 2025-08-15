@@ -1,7 +1,7 @@
 // src/components/ui/MissionStack.tsx
-import React, { useMemo, useState } from "react";
-import MissionStatus from "./MissionStatus";
-import type { Mission } from "../../api/mission";
+import { useMemo, useState } from 'react';
+import MissionStatus from './MissionStatus';
+import type { Mission } from '../../types';
 
 type MissionWithPos = Mission & { _pos: number };
 
@@ -22,7 +22,7 @@ type Props = {
 
 export default function MissionStack({
   missions,
-  className = "",
+  className = '',
   visible = 3,
   xStep = 40,
   cardWidth = 784,
@@ -49,7 +49,7 @@ export default function MissionStack({
   const containerWidth = cardWidth + xStep * (showCount - 1);
   const containerHeight = cardHeight;
 
-  const next = () => setIndex((v) => (v + 1) % len);
+  const next = () => setIndex(v => (v + 1) % len);
   // 필요하면 이전 버튼도 추가 가능:
   // const prev = () => setIndex((v) => (v - 1 + len) % len);
 
@@ -63,7 +63,7 @@ export default function MissionStack({
       {stack
         .slice()
         .reverse() // 뒤 카드부터 먼저 깔고, 앞 카드를 마지막에 렌더
-        .map((m) => {
+        .map(m => {
           const i = m._pos; // 0: 맨 앞
           const translateX = i * xStep;
           const scale = 1 - i * scaleStep;
@@ -78,11 +78,11 @@ export default function MissionStack({
                 transform: `translateX(${translateX}px) scale(${scale})`,
                 opacity,
                 zIndex: 100 - i,
-                pointerEvents: isFront ? "auto" : "none",
+                pointerEvents: isFront ? 'auto' : 'none',
               }}
               onClick={isFront ? next : undefined}
-              role={isFront ? "button" : undefined}
-              aria-label={isFront ? "다음 미션 보기" : undefined}
+              role={isFront ? 'button' : undefined}
+              aria-label={isFront ? '다음 미션 보기' : undefined}
             >
               <MissionStatus
                 title={m.title}

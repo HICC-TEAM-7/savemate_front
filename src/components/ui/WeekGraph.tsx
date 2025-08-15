@@ -1,31 +1,32 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-import { fetchWeekSpending, type DaySpending } from "../../api/spendingdata";
+import { useEffect, useMemo, useState } from 'react';
+import { ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { fetchWeekSpending, type DaySpending } from '../../api/spendingdata';
 
 type Props = {
   data?: DaySpending[];
   baseDate?: Date;
   upToToday?: boolean;
   title?: string;
+  fill?: boolean;
 };
 
-type CategoryKey = "food" | "gift" | "cafe" | "travel";
+type CategoryKey = 'food' | 'gift' | 'cafe' | 'travel';
 
 const LABEL: Record<CategoryKey, string> = {
-  food: "식비",
-  gift: "선물",
-  cafe: "카페",
-  travel: "여행",
+  food: '식비',
+  gift: '선물',
+  cafe: '카페',
+  travel: '여행',
 };
 
 const OPACITIES = [0.8, 0.6, 0.2, 0.1];
-const currency = (n: number) => new Intl.NumberFormat("ko-KR").format(n);
+const currency = (n: number) => new Intl.NumberFormat('ko-KR').format(n);
 
 const WeekGraph: React.FC<Props> = ({
   data,
   baseDate,
   upToToday = true,
-  title = "WEEKLY REPORT",
+  title = 'WEEKLY REPORT',
 }) => {
   const [localData, setLocalData] = useState<DaySpending[]>([]);
 
@@ -54,9 +55,9 @@ const WeekGraph: React.FC<Props> = ({
 
     const total = sum.food + sum.gift + sum.cafe + sum.travel;
 
-    const keys: CategoryKey[] = ["food", "gift", "cafe", "travel"];
+    const keys: CategoryKey[] = ['food', 'gift', 'cafe', 'travel'];
     const segs = keys
-      .map((k) => ({
+      .map(k => ({
         key: k,
         label: LABEL[k],
         amount: sum[k],
@@ -69,7 +70,7 @@ const WeekGraph: React.FC<Props> = ({
   }, [localData]);
 
   const [hoverKey, setHoverKey] = useState<CategoryKey | undefined>(undefined);
-  const hovered = segs.find((s) => s.key === hoverKey);
+  const hovered = segs.find(s => s.key === hoverKey);
 
   return (
     <div className="w-full max-w-[200px]">

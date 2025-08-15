@@ -1,4 +1,3 @@
-import React from "react";
 import SpendingList from "../ui/SpendingList";
 import FriendComparison from "../layout/FriendComparison";
 
