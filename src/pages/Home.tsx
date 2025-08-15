@@ -1,30 +1,28 @@
-import { useState } from "react";
-import { format } from "date-fns";
-import { useModal } from "../hooks/useModal";
-import ExpenseModal from "../components/modal/ExpenseModal";
-import { Expense, ApiError } from "../types";
-import { createExpense } from "../api/expense";
-import Top from "../components/layout/Top";
-import Middle from "../components/layout/Middle";
-import Bottom from "../components/layout/Bottom";
+import { useState } from 'react';
+import { format } from 'date-fns';
+import { useModal } from '../hooks/useModal';
+import ExpenseModal from '../components/modal/ExpenseModal';
+import { Expense, ApiError } from '../types';
+import { createExpense } from '../api/expense';
+import Top from '../components/layout/Top';
+import Middle from '../components/layout/Middle';
+import Bottom from '../components/layout/Bottom';
 
 const Home = () => {
   const { isOpen, openModal, closeModal } = useModal();
-  const [isLoading, setIsLoading] = useState(false);
 
   // 선택 날짜: 기본은 오늘
   const [selectedDate, setSelectedDate] = useState(
-    format(new Date(), "yyyy-MM-dd")
+    format(new Date(), 'yyyy-MM-dd')
   );
 
   // 캘린더에서 날짜 클릭 시 모달 열기
   const handleCalendarSelect = (date: Date) => {
-    setSelectedDate(format(date, "yyyy-MM-dd"));
+    setSelectedDate(format(date, 'yyyy-MM-dd'));
     openModal();
   };
 
-  const handleExpenseSubmit = async (expenseData: Omit<Expense, "id">) => {
-    setIsLoading(true);
+  const handleExpenseSubmit = async (expenseData: Omit<Expense, 'id'>) => {
     try {
       const result = await createExpense(expenseData);
       console.log(result);
@@ -35,14 +33,12 @@ const Home = () => {
       console.error(error);
       const apiError = error as ApiError;
       if (apiError.response?.status === 401) {
-        alert("로그인이 필요합니다.");
+        alert('로그인이 필요합니다.');
       } else if (apiError.response?.status === 400) {
-        alert("입력 정보를 확인해주세요.");
+        alert('입력 정보를 확인해주세요.');
       } else {
-        alert("지출 등록에 실패했습니다.");
+        alert('지출 등록에 실패했습니다.');
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
