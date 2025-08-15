@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { addMonths, format, isSameDay, isToday } from "date-fns";
 import { DayCell, getMonthMatrix } from "../../utils/calendar";
 

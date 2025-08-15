@@ -1,5 +1,5 @@
 // src/api/spendingdata.ts
-import axios from "axios";
+import axios from 'axios';
 import {
   startOfWeek,
   endOfWeek,
@@ -8,11 +8,11 @@ import {
   eachDayOfInterval,
   format,
   parseISO,
-} from "date-fns";
+} from 'date-fns';
 
 /** 일자별 지출 레코드 */
 export type DaySpending = {
-  date: string;  // "YYYY-MM-DD"
+  date: string; // "YYYY-MM-DD"
   food: number;
   gift: number;
   cafe: number;
@@ -21,31 +21,41 @@ export type DaySpending = {
 
 /** ---------- 더미 데이터 (API 연결 전) ---------- */
 export const dailySpending: DaySpending[] = [
-  { date: "2025-08-01", food: 13500, gift: 0, cafe: 3500, travel: 0 },
-  { date: "2025-08-02", food: 14000, gift: 0, cafe: 0, travel: 30000 },
-  { date: "2025-08-03", food: 9500, gift: 0, cafe: 2500, travel: 0 },
-  { date: "2025-08-04", food: 12000, gift: 0, cafe: 0, travel: 0 },
-  { date: "2025-08-05", food: 11000, gift: 0, cafe: 5500, travel: 0 },
-  { date: "2025-08-06", food: 12000, gift: 0, cafe: 5500, travel: 0 },
-  { date: "2025-08-07", food: 8500, gift: 12000, cafe: 0, travel: 0 },
-  { date: "2025-08-08", food: 15000, gift: 0, cafe: 4500, travel: 0 },
-  { date: "2025-08-09", food: 10000, gift: 0, cafe: 6000, travel: 0 },
-  { date: "2025-08-10", food: 8000, gift: 0, cafe: 0, travel: 30000 },
-  { date: "2025-08-11", food: 12500, gift: 8000, cafe: 5500, travel: 0 },
-  { date: "2025-08-12", food: 11000, gift: 0, cafe: 4000, travel: 0 },
+  { date: '2025-08-01', food: 13500, gift: 0, cafe: 3500, travel: 0 },
+  { date: '2025-08-02', food: 14000, gift: 0, cafe: 0, travel: 30000 },
+  { date: '2025-08-03', food: 9500, gift: 0, cafe: 2500, travel: 0 },
+  { date: '2025-08-04', food: 12000, gift: 0, cafe: 0, travel: 0 },
+  { date: '2025-08-05', food: 11000, gift: 0, cafe: 5500, travel: 0 },
+  { date: '2025-08-06', food: 12000, gift: 0, cafe: 5500, travel: 0 },
+  { date: '2025-08-07', food: 8500, gift: 12000, cafe: 0, travel: 0 },
+  { date: '2025-08-08', food: 15000, gift: 0, cafe: 4500, travel: 0 },
+  { date: '2025-08-09', food: 10000, gift: 0, cafe: 6000, travel: 0 },
+  { date: '2025-08-10', food: 8000, gift: 0, cafe: 0, travel: 30000 },
+  { date: '2025-08-11', food: 12500, gift: 8000, cafe: 5500, travel: 0 },
+  { date: '2025-08-12', food: 11000, gift: 0, cafe: 4000, travel: 0 },
 ].sort((a, b) => a.date.localeCompare(b.date));
 
 /** ---------- 유틸 ---------- */
 
-const toKey = (d: Date) => format(d, "yyyy-MM-dd");
-const ZERO = (date: string): DaySpending => ({ date, food: 0, gift: 0, cafe: 0, travel: 0 });
+const toKey = (d: Date) => format(d, 'yyyy-MM-dd');
+const ZERO = (date: string): DaySpending => ({
+  date,
+  food: 0,
+  gift: 0,
+  cafe: 0,
+  travel: 0,
+});
 
 /** 날짜 채움: from~to 모든 날짜를 포함하고, 없는 날짜는 0원으로 보간 */
-function fillMissingDays(source: DaySpending[], from: string, to: string): DaySpending[] {
-  const map = new Map(source.map((d) => [d.date, d]));
+function fillMissingDays(
+  source: DaySpending[],
+  from: string,
+  to: string
+): DaySpending[] {
+  const map = new Map(source.map(d => [d.date, d]));
   const start = parseISO(from);
   const end = parseISO(to);
-  return eachDayOfInterval({ start, end }).map((dt) => {
+  return eachDayOfInterval({ start, end }).map(dt => {
     const key = toKey(dt);
     return map.get(key) ?? ZERO(key);
   });
@@ -71,13 +81,16 @@ const isFutureMonth = (base: Date, today = new Date()) => {
 function buildZeroMonth(base: Date): DaySpending[] {
   const start = startOfMonth(base);
   const end = endOfMonth(base);
-  return eachDayOfInterval({ start, end }).map((dt) => ZERO(toKey(dt)));
+  return eachDayOfInterval({ start, end }).map(dt => ZERO(toKey(dt)));
 }
 
 /** ---------- 범위 계산 ---------- */
 
 /** 주간 범위(월~일). opts.upToToday=true이고 '이번 주'면 월~오늘로 자름 */
-export function getWeekRange(base: Date = new Date(), opts?: { upToToday?: boolean }) {
+export function getWeekRange(
+  base: Date = new Date(),
+  opts?: { upToToday?: boolean }
+) {
   const start = startOfWeek(base, { weekStartsOn: 1 });
   const endFull = endOfWeek(base, { weekStartsOn: 1 });
   if (opts?.upToToday && sameWeek(base, new Date())) {
@@ -87,7 +100,10 @@ export function getWeekRange(base: Date = new Date(), opts?: { upToToday?: boole
 }
 
 /** 월간 범위(1일~말일). opts.upToToday=true이고 '이번 달'이면 1일~오늘로 자름 */
-export function getMonthRange(base: Date = new Date(), opts?: { upToToday?: boolean }) {
+export function getMonthRange(
+  base: Date = new Date(),
+  opts?: { upToToday?: boolean }
+) {
   const start = startOfMonth(base);
   const endFull = endOfMonth(base);
   if (opts?.upToToday && sameMonth(base, new Date())) {
@@ -105,7 +121,10 @@ export function getMonthRange(base: Date = new Date(), opts?: { upToToday?: bool
  *
  * 예: GET {VITE_API_BASE_URL}/spendings/daily?from=YYYY-MM-DD&to=YYYY-MM-DD
  */
-export async function fetchDailySpending(from: string, to: string): Promise<DaySpending[]> {
+export async function fetchDailySpending(
+  from: string,
+  to: string
+): Promise<DaySpending[]> {
   const baseURL = import.meta.env.VITE_API_BASE_URL as string | undefined;
 
   if (!baseURL) {
@@ -117,16 +136,21 @@ export async function fetchDailySpending(from: string, to: string): Promise<DayS
     const res = await axios.get<DaySpending[]>(`${baseURL}/spendings/daily`, {
       params: { from, to },
     });
-    const sorted = (res.data ?? []).sort((a, b) => a.date.localeCompare(b.date));
+    const sorted = (res.data ?? []).sort((a, b) =>
+      a.date.localeCompare(b.date)
+    );
     return fillMissingDays(sorted, from, to);
   } catch (e) {
-    console.warn("[fetchDailySpending] API 실패, 더미로 대체:", e);
+    console.warn('[fetchDailySpending] API 실패, 더미로 대체:', e);
     return fillMissingDays(dailySpending, from, to);
   }
 }
 
 /** 기준일의 주간 데이터(월~일). 기본: '이번 주'면 월~오늘만 */
-export async function fetchWeekSpending(base: Date = new Date(), upToToday = true) {
+export async function fetchWeekSpending(
+  base: Date = new Date(),
+  upToToday = true
+) {
   const { from, to } = getWeekRange(base, { upToToday });
   return fetchDailySpending(from, to);
 }
@@ -138,7 +162,10 @@ export async function fetchWeekSpending(base: Date = new Date(), upToToday = tru
  */
 export async function fetchMonthSpending(
   base: Date = new Date(),
-  opts: { upToToday?: boolean; zeroFuture?: boolean } = { upToToday: true, zeroFuture: true }
+  opts: { upToToday?: boolean; zeroFuture?: boolean } = {
+    upToToday: true,
+    zeroFuture: true,
+  }
 ) {
   const { upToToday = true, zeroFuture = true } = opts;
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import MissionStack from "../ui/MissionStack";
 import { Mission } from "../../types";
 import { getMissions } from "../../api/mission";

@@ -1,4 +1,3 @@
-import React from "react";
 
 /** 간단한 진행바 컴포넌트 (값: 0~100) */
 function Progress({ value = 50 }: { value?: number }) {
