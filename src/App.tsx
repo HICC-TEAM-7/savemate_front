@@ -1,14 +1,33 @@
-import { Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Mission from './pages/Mission';
+import { Routes, Route, useLocation } from "react-router-dom";
+import Sidebar from "./components/layout/Sidebar";
+import Home from "./pages/Home";
+import Mission from "./pages/Mission";
+import Friend from "./pages/Friend";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 function App() {
+  const location = useLocation();
+  // 로그인/회원가입 페이지에서는 사이드바 숨김
+  const hideSidebar = ["/login", "/signup"].includes(location.pathname);
+
   return (
-    <div className="min-h-screen app-background">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/mission" element={<Mission />} />
-      </Routes>
+    <div className="h-screen overflow-hidden app-background">
+      {!hideSidebar && <Sidebar />}
+
+      <div
+        className={`${hideSidebar ? "ml-0" : "ml-48"} h-screen flex flex-col transition-all duration-300`}
+      >
+        <main className="flex-1 overflow-y-auto">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/mission" element={<Mission />} />
+            <Route path="/friend" element={<Friend />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Routes>
+        </main>
+      </div>
     </div>
   );
 }
